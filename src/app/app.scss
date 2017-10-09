@@ -1,6 +1,18 @@
-// http://ionicframework.com/docs/theming/
+// http://ionicframework.com/docs/v2/theming/
 
+.alignLeft{
+    float: left;
+}
 
+.alignRight{
+    float: right;
+}
+
+.actNoHeader{
+    background: gold;
+    /*height: 28px !important;*/
+
+}
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These

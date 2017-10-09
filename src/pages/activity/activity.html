@@ -1,0 +1,585 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Activities</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only end>
+        <ion-icon end class="ion-ios-funnel"></ion-icon>
+       </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only end>
+        <ion-icon end name="notifications"></ion-icon>
+       </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only end>
+        <ion-icon end name="person"></ion-icon>
+       </button>
+    </ion-buttons>
+
+  </ion-navbar>
+</ion-header>
+<ion-content no-padding>
+  <ion-refresher (ionRefresh)="dorefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!--<ion-fab left top>
+      <button ion-fab color="secondary"><ion-icon name="arrow-dropright"></ion-icon></button>
+      <ion-fab-list side="right">
+        <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
+      </ion-fab-list>
+    </ion-fab>-->
+  <ion-list no-padding>
+    <ion-item *ngFor="let row of acts;let i = index">
+      <ion-row (click)="expandItem(row)" class="actNoHeader">
+        <ion-col col-5 style="text-align:left;"> {{row["Activity #"]}} </ion-col>
+        <ion-col col-7 style="text-align:right;"> {{row["Status"]}} <ion-icon [name]='row.arrow'></ion-icon></ion-col>
+        
+      </ion-row>
+
+      <expandable [expandHeight]="itemExpandHeight" [expanded]="row.expanded" no-padding>
+        <ion-grid style="white-space:normal;" no-padding>
+
+          <ion-row style="background1:#F4F4F4;" padding-top>
+            <ion-col no-padding col-4 style="text-align:left;color:grey;">Priority</ion-col>
+            <ion-col no-padding col-4 style="text-align:center;color:grey;">Type</ion-col>
+            <ion-col no-padding style="text-align: right;color:grey;">Owner</ion-col>
+          </ion-row>
+          <ion-row style="background1:#F4F4F4;">
+              <ion-col no-padding col-4 style="text-align:left;">
+                <div> {{row["Priority"]}} </div>
+              </ion-col>
+              <ion-col no-padding col-4 style="text-align:center;">
+                <div> {{row["Type"]}} </div>
+              </ion-col>
+              <ion-col no-padding style="text-align: right;"> {{row["Owner"]}} </ion-col>
+            </ion-row>
+          <ion-row padding-top>
+            <ion-col  no-padding style="text-align:left;color:grey;" color="blue">
+              Account
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col  no-padding style="text-align:justified;">
+              {{row["Account Name"]}}
+            </ion-col>
+          </ion-row>
+          <ion-row padding-top>
+            <ion-col  no-padding style="text-align:left;color:grey;" color="blue">
+              Address
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col no-padding style="text-align:justified;"> {{row["DBD Full Address"]}} </ion-col>
+          </ion-row>
+          <ion-row padding-top>
+            <ion-col col-3 no-padding>
+              <ion-item no-padding no-lines style="text-align:left;color:grey;">ETA</ion-item>
+            </ion-col>
+            <ion-col col-9 no-padding>
+              <ion-item no-padding no-lines color="light"  style="text-align: right;">
+                <ion-datetime displayFormat="MM DD YYYY HH:mm:ss" pickerFormat="DD MMMM YYYY" [(ngModel)]="row.ETA"></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-3 no-padding>
+              <ion-item no-padding no-lines style="text-align:left;color:grey;">FINISH</ion-item>
+            </ion-col>
+            <ion-col col-9 no-padding>
+              <ion-item no-padding no-lines color="light" style="text-align: right;">
+                <ion-datetime displayFormat="MM DD YYYY HH:mm:ss" pickerFormat="DD MMMM YYYY" [(ngModel)]="row.FINISH"></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-segment [(ngModel)]="row.details">
+          <ion-segment-button value="minfo">
+            <!-- <ion-row><ion-col><ion-icon name="ios-add-circle"></ion-icon></ion-col></ion-row>
+            <ion-row><ion-col>More Info</ion-col></ion-row> -->
+            Activity
+          </ion-segment-button>
+          <ion-segment-button value="account">
+            <!-- <ion-icon name="contacts"></ion-icon>-->
+            Account
+          </ion-segment-button>
+          <ion-segment-button value="dates">
+            <!-- <ion-icon name="calendar"></ion-icon>-->
+            Date
+          </ion-segment-button>
+          <ion-segment-button value="equipment">
+            <!-- <ion-icon name="cog"></ion-icon> -->
+            Equip
+          </ion-segment-button>
+          <!--<ion-segment-button value="activity">
+            <ion-icon name="clipboard"></ion-icon>
+          </ion-segment-button> -->
+        </ion-segment>
+        <ion-grid>
+          <ion-item no-lines>
+            <button ion-button outline item-start (click)="gotodebrief(row['Id'])">Debrief</button>
+            <button ion-button item-end>Edit</button>
+          </ion-item>
+        </ion-grid>
+        <div [ngSwitch]="row.details">
+          <ion-list *ngSwitchCase="'equipment'">
+            <ion-item color="light" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Serial #</ion-col>
+                <ion-col no-padding>{{row['Serial #']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Problem Category</ion-col>
+                <ion-col no-padding>{{row['Problem Category']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Customer Prod Id</ion-col>
+                <ion-col no-padding>{{row['Customer Prod Id']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Customer Problem #</ion-col>
+                <ion-col no-padding>{{row['Customer Problem #']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Entitlement Desc</ion-col>
+                <ion-col no-padding>{{row['Entitlement Desc']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Entitlement Type</ion-col>
+                <ion-col no-padding>{{row['Entitlement Type']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Coverage Hours</ion-col>
+                <ion-col no-padding>{{row['Coverage Hours']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>FCO#</ion-col>
+                <ion-col no-padding>{{row['FCO#']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Sales Order</ion-col>
+                <ion-col no-padding>{{row['Sales Order']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Status Byte</ion-col>
+                <ion-col no-padding>{{row['Status Byte']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Trans Count</ion-col>
+                <ion-col no-padding>{{row['Trans Count']}}</ion-col>
+              </ion-row>
+            </ion-item>
+
+          </ion-list>
+          <ion-list *ngSwitchCase="'minfo'">
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>SR Type</ion-col>
+                <ion-col no-padding>{{row['SR Type']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Status</ion-col>
+                <ion-col no-padding>{{row['Status']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Follow-up Activity#</ion-col>
+                <ion-col no-padding>{{row['Follow-up Activity#']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Locked</ion-col>
+                <ion-col no-padding>{{row['Locked']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Owner</ion-col>
+                <ion-col no-padding>{{row['Owner']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Effective Date</ion-col>
+                <ion-col no-padding>{{row['Effective Date']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Equipment</ion-col>
+                <ion-col no-padding>{{row['Equipment']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Device Type</ion-col>
+                <ion-col no-padding>{{row['Device Type']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Sub Device</ion-col>
+                <ion-col no-padding>{{row['Sub Device']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Model</ion-col>
+                <ion-col no-padding>{{row['Model']}}</ion-col>
+              </ion-row>
+            </ion-item>
+
+          </ion-list>
+          <ion-list *ngSwitchCase="'dates'">
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Arrival D/T</ion-col>
+                <ion-col no-padding>{{row['Arrival D/T']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Debrief Comp D/T</ion-col>
+                <ion-col no-padding>{{row['Debrief Complete D/T']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Contact Date</ion-col>
+                <ion-col no-padding>{{row['Contact Date']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>ATW Start</ion-col>
+                <ion-col no-padding>{{row['ATW Start']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>ATW End</ion-col>
+                <ion-col no-padding>{{row['ATW End']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Early Start</ion-col>
+                <ion-col no-padding>{{row['Early Start']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Late Start</ion-col>
+                <ion-col no-padding>{{row['Late Start']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Contact Name</ion-col>
+                <ion-col no-padding>{{row['Contact Name']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Contact Phone</ion-col>
+                <ion-col no-padding>{{row['Contact Phone']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Contact Email</ion-col>
+                <ion-col no-padding>{{row['Contact Email']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Who To See</ion-col>
+                <ion-col no-padding>{{row['Who To See']}}</ion-col>
+              </ion-row>
+            </ion-item>
+
+          </ion-list>
+          <ion-list *ngSwitchCase="'account'">
+            <ion-item>
+              <ion-row>
+                <ion-col>Site #</ion-col>
+                <ion-col>{{row["Site #"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>FACTS Site#</ion-col>
+                <ion-col>{{row["FACTS Site#"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Risk Level</ion-col>
+                <ion-col>{{row["Risk Level"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Party Name</ion-col>
+                <ion-col>{{row["Party Name"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Casual Account</ion-col>
+                <ion-col>{{row["Casual Account"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Address Line 1</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Address Line 2</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>City</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>State</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Zip Code</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>County</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Country</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Service Branch</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Branch Override</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Site Address Type</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item>
+              <ion-row>
+                <ion-col>Site Address</ion-col>
+                <ion-col>{{row["Category"]}}</ion-col>
+              </ion-row>
+            </ion-item>
+          </ion-list>
+          <ion-list *ngSwitchCase="'activity'" no-padding>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>FACTS Base Call#</ion-col>
+                <ion-col no-padding>{{row['FACTS Base Call#']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Urgency Code</ion-col>
+                <ion-col no-padding>{{row['Urgency Code']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>2 - Standard</ion-col>
+                <ion-col no-padding>{{row['2 - Standard']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <!-- <ion-item  color="dark" no-padding><ion-row no-padding><ion-col  no-padding>Priority</ion-col><ion-col  no-padding>{{row['Priority']}}</ion-col></ion-row></ion-item>-->
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Sub Type</ion-col>
+                <ion-col no-padding>{{row['Sub Type']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Trouble Code</ion-col>
+                <ion-col no-padding>{{row['Trouble Code']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>After Hrs/Std Hrs</ion-col>
+                <ion-col no-padding>{{row['After Hrs/Std Hrs']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>SR #</ion-col>
+                <ion-col no-padding>{{row['SR #']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Special P/O</ion-col>
+                <ion-col no-padding>{{row['Special P/O']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Action Req</ion-col>
+                <ion-col no-padding>{{row['Action Req']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Review</ion-col>
+                <ion-col no-padding>{{row['Review']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Incomplete Rsn</ion-col>
+                <ion-col no-padding>{{row['Incomplete Rsn']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Cancel Rsn</ion-col>
+                <ion-col no-padding>{{row['Cancel Rsn']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Tech Branch</ion-col>
+                <ion-col no-padding>{{row['Tech Branch']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>PM Checklist</ion-col>
+                <ion-col no-padding>{{row['PM Checklist']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Reqd Tech</ion-col>
+                <ion-col no-padding>{{row['Reqd Tech']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Project Task</ion-col>
+                <ion-col no-padding>{{row['Project Task']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Attack</ion-col>
+                <ion-col no-padding>{{row['Attack']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Created Date</ion-col>
+                <ion-col no-padding>{{row['Created Date']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Duration</ion-col>
+                <ion-col no-padding>{{row['Duration']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Cost Transfer#</ion-col>
+                <ion-col no-padding>{{row['Cost Transfer#']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Quoted Amount</ion-col>
+                <ion-col no-padding>{{row['Quoted Amount']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Quoted Expenses</ion-col>
+                <ion-col no-padding>{{row['Quoted Expenses']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Quoted Part</ion-col>
+                <ion-col no-padding>{{row['Quoted Part']}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item color="dark" no-padding>
+              <ion-row no-padding>
+                <ion-col no-padding>Quoted Labor</ion-col>
+                <ion-col no-padding>{{row['Quoted Labor']}}</ion-col>
+              </ion-row>
+            </ion-item>
+
+          </ion-list>
+        </div>
+      </expandable>
+
+    </ion-item>
+  </ion-list>
+
+</ion-content>

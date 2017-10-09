@@ -1,14 +1,85 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Dashboard</ion-title>
+
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content padding color="primary">
+  <ion-grid>
+    <!--block start -->
+    <ion-row padding-top>
+      <ion-col style="background: orange;text-align:left;">Not Started</ion-col>
+      <ion-col style="background: yellow;text-align:left;">Acknowledged</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="background: orange;text-align:center">
+      </ion-col>
+      <ion-col  style="background: yellow;text-align:center">
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="background: orange;text-align:center;font-weight:bold;font-size:20px"><ion-badge item-end>3</ion-badge></ion-col>
+      <ion-col style="background: yellow;text-align:center;font-weight:bold;font-size:20px"><ion-badge item-end>6</ion-badge></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="background: orange;text-align:center">
+      </ion-col>
+      <ion-col  style="background: YELLOW;text-align:center">
+      </ion-col>
+    </ion-row>
+    <!--block end -->
+     <!--block start -->
+     <ion-row padding-top>
+        <ion-col style="background: green;text-align:left;">In Progress</ion-col>
+        <ion-col style="background: skyblue;text-align:left;">Closed</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="background: green;text-align:center">
+        </ion-col>
+        <ion-col  style="background: skyblue;text-align:center">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="background: green;text-align:center;font-weight:bold;font-size:20px"><ion-badge item-end>1</ion-badge></ion-col>
+        <ion-col style="background: skyblue;text-align:center;font-weight:bold;font-size:20px"><ion-badge item-end>9</ion-badge></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="background: green;text-align:center">
+        </ion-col>
+        <ion-col  style="background: skyblue;text-align:center">
+        </ion-col>
+      </ion-row>
+      <!--block end -->
+     
+  </ion-grid>
+  <ion-card>
+      <ion-card-header>
+        Inventory Level
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #barCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+ <!--
+    <ion-card>
+      <ion-card-header>
+        Doughnut Chart
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #doughnutCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+ 
+    <ion-card>
+      <ion-card-header>
+        Line Chart
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #lineCanvas></canvas>
+      </ion-card-content>
+    </ion-card> -->
 </ion-content>

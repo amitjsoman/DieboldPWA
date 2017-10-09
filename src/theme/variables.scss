@@ -1,5 +1,5 @@
 // Ionic Variables and Theming. For more info, please see:
-// http://ionicframework.com/docs/theming/
+// http://ionicframework.com/docs/v2/theming/
 
 // Font path is used to include ionicons,
 // roboto, and noto sans fonts
@@ -20,7 +20,7 @@ $app-direction: ltr;
 // To customize the look and feel of this app, you can override
 // the Sass variables found in Ionic's source scss files.
 // To view all the possible Ionic variables, see:
-// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 
 
@@ -34,11 +34,16 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
+  //primary:    #488aff,
+  primary: rgb(1,73,134),
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  golden: gold,
+  blueback:blue,
+  skyblueback: skyblue,
+  orangeback:orange
 );
 
 
@@ -76,7 +81,7 @@ $colors: (
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:
-// http://ionicframework.com/docs/ionicons/
+// http://ionicframework.com/docs/v2/ionicons/
 
 @import "ionic.ionicons";
 
@@ -86,3 +91,24 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+@font-face {
+  font-family: 'open_sansregular';
+  src: url('OpenSans-Regular-webfont.eot');
+  src: url('OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url(($font-path) +'/OpenSans-Regular-webfont.woff') format('woff'),
+       url('OpenSans-Regular-webfont.ttf') format('truetype'),
+       url('OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+}
+$font-family-md-base: "open_sansregular";
+$font-family-ios-base: "open_sansregular";
+$font-family-wp-base: "open_sansregular";
+$segment-button-ios-toolbar-font-size:1rem;
+$segment-button-md-font-size:1rem;
+
+$myorange :(background:orange)
+
+
